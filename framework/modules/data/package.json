@@ -1,0 +1,11 @@
+{
+  "name": "data",
+  "version": "1.0.0",
+  "description": "Module containing data structures pertaining to the application.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo 'This is the data module'"
+  },
+  "author": "Saurin Magiawala",
+  "license": "ISC"
+}

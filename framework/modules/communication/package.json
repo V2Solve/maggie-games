@@ -1,0 +1,11 @@
+{
+  "name": "communication",
+  "version": "1.0.0",
+  "description": "This contains structures for communication.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo 'This is the communications data module'"
+  },
+  "author": "Saurin Magiawala",
+  "license": "ISC"
+}
