@@ -37,9 +37,23 @@ export class CosmoDBConnection implements DBConnection
         }
     }
     
-    async searchObjects<T>(query: any, pagingInfo: PagingInfo): Promise<SearchResults<T>> 
+    async searchObjects<T>(q: any,dbName: string, containerName: string, pagingInfo: PagingInfo): Promise<SearchResults<T>> 
     {
-        throw new Error("Method not implemented.");
+        let {database}  = await this.cosmoDbClient.databases.createIfNotExists ({ id: dbName });
+        let {container} = await database.containers.createIfNotExists({ id: containerName });
+
+        let querySpec = {
+            query: q
+        };
+
+        const { resources: results } = await container.items.query(querySpec).fetchAll();
+        let arr = new Array<T>();
+
+        for (let rec of results)
+        arr.push(rec);
+
+        let sr = new SearchResults(arr,pagingInfo);
+        return sr;
     }
     
 }

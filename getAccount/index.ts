@@ -1,6 +1,6 @@
-import { AzureFunction, Context, HttpRequest, HttpRequestHeaders } from "@azure/functions"
+import { AzureFunction, Context, HttpRequest } from "@azure/functions"
 import { getPersonInfoFromJwt } from "../framework/modules/auth-logic/jwtauthlogic";
-import { createAccount } from "../framework/modules/business-logic/account-logic";
+import { getAccountInfo } from "../framework/modules/business-logic/account-logic";
 import { getConfiguredDBConnection } from "../framework/modules/business-logic/db-logic";
 import { DBConnection } from "../framework/modules/commons/dbabstraction";
 import { createErrorMessageSingle, createSuccessMessageSingle, RestResponse } from "../framework/modules/communication/comm-structs";
@@ -8,7 +8,6 @@ import { Person } from "../framework/modules/data/usermanagement";
 
 const httpTrigger: AzureFunction = async function (context: Context, req: HttpRequest): Promise<void> 
 {
-
     let returnResponse: RestResponse<Person>;
     let httpResponseStatus = 200;
 
@@ -21,7 +20,7 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
     let p: Person = getPersonInfoFromJwt(null);
     
     // okay, so create the account of the person, passing the DB Connection
-    let ret: Person = await createAccount(connection,p);
+    let ret: Person = await getAccountInfo(connection,p);
 
     returnResponse = createSuccessMessageSingle(ret);
     
@@ -37,9 +36,8 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
         status: httpResponseStatus,
         body: returnResponse
     };
-    
+
 };
 
-
-
 export default httpTrigger;
+

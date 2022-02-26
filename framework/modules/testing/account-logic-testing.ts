@@ -2,7 +2,7 @@ import { Location, Person } from "../data/usermanagement";
 
 export function createAPerson () : Person
 {
-    let userName = "testUser";
+    let userName = "testUser3";
     let idp = "gmail";
     let email = "saurinya@gmail.com"
     let phone = "2489109078"
