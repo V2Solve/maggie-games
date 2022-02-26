@@ -18,7 +18,7 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
     let connection: DBConnection = getConfiguredDBConnection ();
     
     // Lets find the person who is calling...
-    let p: Person = getPersonInfoFromJwt(null);
+    let p: Person = getPersonInfoFromJwt(null,req.body);
     
     // okay, so create the account of the person, passing the DB Connection
     let ret: Person = await createAccount(connection,p);
@@ -30,7 +30,7 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
     {
         // Something did not go right, lets send the error message back..
         httpResponseStatus = 400;
-        returnResponse = createErrorMessageSingle(JSON.stringify(error));
+        returnResponse = createErrorMessageSingle(error);
     }
 
     context.res = {

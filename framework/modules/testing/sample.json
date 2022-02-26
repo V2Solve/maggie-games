@@ -1,0 +1,12 @@
+{
+    "emailStatus": 1,
+    "accountStatus": 0,
+    "location": {
+        "country": "USA",
+        "zip": "30005"
+    },
+    "username": "testUser5",
+    "idp": "gmail",
+    "email": "testUser5@gmail.com",
+    "phone": "2489109078"
+}
