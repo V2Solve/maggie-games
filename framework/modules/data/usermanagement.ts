@@ -13,6 +13,8 @@ export enum EMAILSTATUS
 
 export class Person
 {
+    nativeId: string;   // A native ID if needed for the underlying system.
+
     /**
      * User Name Unique Across the System.
      */

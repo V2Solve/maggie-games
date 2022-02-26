@@ -1,9 +1,8 @@
+import { DBConnection, StoredDoc } from "../commons/dbabstraction";
 import { Person } from "../data/usermanagement";
 
-export function createAccount (person: Person): Person
+export async function createAccount (conn: DBConnection,person: Person): Promise<Person>
 {
-
-
-
-return null;
+    let ret: StoredDoc<Person> = await conn.storeObject(person,"management","users")
+    return ret.resource;
 }
