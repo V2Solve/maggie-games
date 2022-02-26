@@ -1,0 +1,9 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "",
+    "FUNCTIONS_WORKER_RUNTIME": "node",
+    "maggie-games-db-uri": "https://maggie-games.documents.azure.com:443/",
+    "maggie-games-db-key": "2q9iv8njYRtrL8k2WNPNcbY9xWB6Mx8icGXDojRcKfchOfTkrwYctoqBv70MoXwoRFEwdjlzanmugomDNAi6cg=="
+  }
+}
