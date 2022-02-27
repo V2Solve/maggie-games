@@ -27,13 +27,12 @@ export class SearchResults<T>
 
 export class StoredDoc<T>
 {
+    id: string;
     resource: T;
-    id: string; // the id of the stored object in the Database;
 
-    constructor (resource: T,id: string)
+    constructor (resource: T)
     {
         this.resource = resource;
-        this.id  = id;   
     }
 }
 
@@ -48,11 +47,20 @@ export interface DBConnection
      */
     storeObject<T> (object: T,dbName: string,containerName: string): Promise<StoredDoc<T>>
 
+    /**
+     * Should update the object in to the Database with the given dbName and the given Container Name;
+     * @param object 
+     * @param dbName 
+     * @param containerName 
+     * @returns theUpdateObject that was stored
+     */
+    updateObject<T> (object: StoredDoc<T>, dbName: string, containerName: string): Promise<StoredDoc<T>>
+
 
     /**
      * searches the Object and returns the search results as per the Query
      * @param query 
      * @param pagingInfo 
      */
-    searchObjects<T> (query: any,dbName: string, containerName: string,pagingInfo: PagingInfo): Promise<SearchResults<T>>;
+    searchObjects<T> (query: any,dbName: string, containerName: string,pagingInfo: PagingInfo): Promise<SearchResults<StoredDoc<T>>>
 }

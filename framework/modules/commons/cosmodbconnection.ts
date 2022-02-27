@@ -1,4 +1,4 @@
-import { CosmosClient, ItemResponse } from "@azure/cosmos";
+import { CosmosClient, Item, ItemDefinition, ItemResponse, PatchRequestBody } from "@azure/cosmos";
 import { resolve } from "dns";
 import { DBConnection, PagingInfo, SearchResults, StoredDoc } from "./dbabstraction";
 
@@ -20,24 +20,52 @@ export class CosmoDBConnection implements DBConnection
     {
         let {database}  = await this.cosmoDbClient.databases.createIfNotExists ({ id: dbName });
         let {container} = await database.containers.createIfNotExists({ id: containerName });
+        let objectToStore = new StoredDoc<T>(object);
         
-        let obj: ItemResponse<T> = await container.items.create<T>(object);
-        
+        let obj: ItemResponse<StoredDoc<T>> = await container.items.create<StoredDoc<T>>(objectToStore);
+
         if (obj != null)
         {
+            objectToStore.id = obj.item.id;
             return new Promise<StoredDoc<T>> ((resolve)=>{
-                resolve(new StoredDoc(object,obj.item.id));
+                resolve(objectToStore);
             })
         }
         else
         {
             return new Promise<StoredDoc<T>> ((reject)=>{
-                reject(new StoredDoc(object,"-"));
+                reject(objectToStore);
             })
         }
     }
-    
-    async searchObjects<T>(q: any,dbName: string, containerName: string, pagingInfo: PagingInfo): Promise<SearchResults<T>> 
+
+    async updateObject<T> (object: StoredDoc<T>, dbName: string, containerName: string): Promise<StoredDoc<T>>
+    {
+        let {database}  = await this.cosmoDbClient.databases.createIfNotExists ({ id: dbName });
+        let {container} = await database.containers.createIfNotExists({ id: containerName });
+        
+        let obj: ItemResponse<ItemDefinition> = await container.items.upsert(object);
+        
+        if (obj == null)
+           throw "Object not found in db: " + object.resource;
+
+        if (obj != null)
+        {
+            object.id = obj.item.id;
+            return new Promise<StoredDoc<T>> ((resolve)=>{
+                resolve(object);
+            })
+        }
+        else
+        {
+            return new Promise<StoredDoc<T>> ((reject)=>{
+                reject(object);
+            })
+        }
+    }
+
+       
+    async searchObjects<T> (q: any,dbName: string, containerName: string, pagingInfo: PagingInfo): Promise<SearchResults<StoredDoc<T>>> 
     {
         let {database}  = await this.cosmoDbClient.databases.createIfNotExists ({ id: dbName });
         let {container} = await database.containers.createIfNotExists({ id: containerName });
@@ -47,12 +75,14 @@ export class CosmoDBConnection implements DBConnection
         };
 
         const { resources: results } = await container.items.query(querySpec).fetchAll();
-        let arr = new Array<T>();
+        let arr = new Array<StoredDoc<T>>();
 
         for (let rec of results)
-        arr.push(rec);
+        {
+            arr.push(rec);
+        }
 
-        let sr = new SearchResults(arr,pagingInfo);
+        let sr = new SearchResults<StoredDoc<T>>(arr,pagingInfo);
         return sr;
     }
     

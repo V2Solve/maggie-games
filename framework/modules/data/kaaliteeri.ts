@@ -1,4 +1,4 @@
-import { BaseGame,GamingPlayer,CardSuit,Hand,Room,Card,CardPip,Deck} from "./gamebasics";
+import { BaseGame,GamingPlayer,CardSuit,Hand,GamingRoom,Card,CardPip,Deck} from "./gamebasics";
 import { Person } from "./usermanagement";
 import { printDeck, printGameInfo } from "./utility";
 
@@ -10,7 +10,7 @@ export class KaaliTeeriGame extends BaseGame
     completedHands: Array<Hand> = new Array<Hand>();
     currentHand: Hand;
 
-    constructor (id: string,room: Room)
+    constructor (id: string,room: GamingRoom)
     {
         super (id,room);
     }
