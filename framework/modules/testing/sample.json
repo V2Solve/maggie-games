@@ -1,12 +1,15 @@
 {
-    "emailStatus": 1,
-    "accountStatus": 0,
+    "emailStatus": "UnVerified",
+    "accountStatus": "UnRegistered",
     "location": {
         "country": "USA",
         "zip": "30005"
     },
     "username": "testUser5",
-    "idp": "gmail",
+    "idp": {
+        "idp": "google",
+        "uniqueId": "something@google.com"
+    },
     "email": "testUser5@gmail.com",
     "phone": "2489109078"
 }

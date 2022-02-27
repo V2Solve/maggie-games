@@ -25,7 +25,7 @@ export async function createAccount (conn: DBConnection,person: Person): Promise
 export async function getAccountInfo(conn: DBConnection, p: Person): Promise<Person>
 {
     let pagingInfo = new PagingInfo(1,1);
-    let query = "select * from c where c.email = '" + p.email + "' and c.idp = '"+p.idp+ "'"
+    let query = "select * from c where c.idp.uniqueId = '" + p.idp.uniqueId + "' and c.idp.idp = '"+p.idp.idp+ "'"
     let ret: SearchResults<Person> = await conn.searchObjects<Person>(query,"management","users",pagingInfo);
 
     if (ret.results == null || ret.results == undefined ||  ret.results.length <= 0)
