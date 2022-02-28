@@ -133,12 +133,12 @@ export abstract class BaseGame
 {
     uniqueId: string;   // The unique id of the game.
     createdAt: Date;    // The date when created;
-    parentRoom: Room;   // The room to which the game belongs.
+    parentRoom: GamingRoom;   // The room to which the game belongs.
     players: Array<GamingPlayer> = new Array<GamingPlayer> (); // The players playing the game.
     observers: Array<GamingObserver> = new Array<GamingObserver> (); // Just folks who are watching..
     decks: Array<Deck> = new Array<Deck>();
 
-    constructor (id: string,room: Room)
+    constructor (id: string,room: GamingRoom)
     {
         this.uniqueId = id;
         this.parentRoom = room;
@@ -212,13 +212,72 @@ export class GamingObserver
 }
 
 
-export class Room 
+export class RoomUniqueness
 {
-    uniqueId: string;
-    roomName: string;
-    admins: Array<Person> = new Array();  // Room Administrators.
+    creator: Person;   // The creator;
+    roomName: string;   // Name of the room.
+
+    constructor (creator: Person,roomName: string)
+    {
+        this.creator = creator;
+        this.roomName = roomName;
+    }
 }
 
+export class GamingRoom
+{
+    uniqueId: RoomUniqueness;
+    admins: Array<Person> = new Array();    // Room Administrators.
+    members: Array<Person> = new Array();   // Room Members;
 
+    constructor (creator: Person,roomName: string)
+    {
+        this.uniqueId = new RoomUniqueness(creator,roomName);
+        this.admins.push(creator);  // By Default the guys is the admin.
+    }
 
+    /**
+     * returns true if the person is admin
+     * @param p 
+     */
+    isAdmin (p: Person): boolean
+    {
+        for (let person of this.admins)
+        {
+            if (p.username == person.username)
+            return true;
+        }
 
+        return false;
+    }
+
+    isMember (p: Person): boolean
+    {
+        for (let person of this.members)
+        {
+            if (p.username == person.username)
+            return true;
+        }
+
+        return false;
+    }
+
+    addAdmin (admin: Person)
+    {
+        if (this.isAdmin(admin))
+            throw "Person is already admin";
+        else
+        this.admins.push(admin);
+    }
+
+    addMember (member: Person)
+    {
+        if (this.isAdmin(member))
+            throw "Person is already admin";
+
+        if (this.isMember(member))
+            throw "Person is already member";
+
+        this.members.push(member);
+    }
+}

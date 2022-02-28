@@ -5,6 +5,12 @@ export class RestReq<T>
     requestBody: T; // Some object representing the Request body
     
     pagingInfo: PagingInfo; // Paging Info in case of asking for search..
+
+    constructor (obj: T, pgInfo: PagingInfo)
+    {
+        this.requestBody = obj;
+        this.pagingInfo = pgInfo;
+    }
 }
 
 

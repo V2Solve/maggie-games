@@ -2,7 +2,7 @@ import { Person } from "../data/usermanagement";
 import { createAPerson } from "../testing/account-logic-testing";
 
 
-export function getPersonInfoFromJwt (jwt: string,body: any): Person
+export function getPersonInfoFromJwt (jwt: string,body: Person): Person
 {
     if (jwt != null || jwt != undefined)
     {

@@ -1,9 +1,9 @@
-import { AzureFunction, Context, HttpRequest } from "@azure/functions"
+import { AzureFunction, Context, HttpRequest, HttpRequestHeaders } from "@azure/functions"
 import { getPersonInfoFromJwt } from "../framework/modules/auth-logic/jwtauthlogic";
-import { getAccountInfo } from "../framework/modules/business-logic/account-logic";
+import { createAccount, getAccountInfo, updateAccountInfo } from "../framework/modules/business-logic/account-logic";
 import { ValidationMessages } from "../framework/modules/business-logic/constants";
 import { getConfiguredDBConnection } from "../framework/modules/business-logic/db-logic";
-import { DBConnection, StoredDoc } from "../framework/modules/commons/dbabstraction";
+import { DBConnection } from "../framework/modules/commons/dbabstraction";
 import { createErrorMessageSingle, createSuccessMessageSingle, RestReq, RestResponse } from "../framework/modules/communication/comm-structs";
 import { Person } from "../framework/modules/data/usermanagement";
 
@@ -17,15 +17,15 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
     // get the DB Connection
     let connection: DBConnection = getConfiguredDBConnection ();
 
-    // we expect the body to be of type RestReq<Person>
-    let restRequest: RestReq<Person> = req.body;    
+    // we expect the body to be of type RestReq<GamingRoom>
+    let restRequest: RestReq<Person> = req.body;
+    
     // Lets find the person who is calling...
     let p: Person = getPersonInfoFromJwt(null,restRequest.requestBody);
     
     // okay, so create the account of the person, passing the DB Connection
-    let ret: StoredDoc<Person> = await getAccountInfo(connection,p);
-
-    if (ret == null)
+    let ret = await updateAccountInfo(connection,p);
+    if (ret == null || ret == undefined)
         throw ValidationMessages.USER_DOES_NOT_EXIST;
 
     returnResponse = createSuccessMessageSingle(ret.resource);
@@ -42,8 +42,8 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
         status: httpResponseStatus,
         body: returnResponse
     };
+  
 
 };
 
 export default httpTrigger;
-

@@ -1,13 +1,23 @@
 export enum ACCOUNTSTATUS
 {
-    "REGISTERED",
-    "REGISTERED_ACCEPTED"
+    "UNREGISTERED" = "UnRegistered",
+    "REGISTERED" = "Registered",
+    "TERMS_ACCEPTED" = "Terms_Accepted"
 }
 
 export enum EMAILSTATUS
 {
-    "VERIFIED",
-    "UN_VERIFIED"
+    "VERIFIED" = "Verified",
+    "UN_VERIFIED" = "UnVerified"
+}
+
+/**
+ * A key indicating the uniqueness of the IDP.
+ */
+export class IdpUniqueness
+{
+    idp: string;            // The IDP name..
+    uniqueId: string;       // The user subject unique to the IDP.
 }
 
 
@@ -23,7 +33,7 @@ export class Person
     /**
      * The Identity Provider
      */
-    idp: string;
+    idp: IdpUniqueness;
 
     email:  string;
     emailStatus: EMAILSTATUS = EMAILSTATUS.UN_VERIFIED;
@@ -36,7 +46,7 @@ export class Person
 
     location: Location = new Location('x','x');
 
-    constructor (username: string,idp: string,email: string,phone: string,loc: Location)
+    constructor (username: string,idp: IdpUniqueness,email: string,phone: string,loc: Location)
     {
         this.username = username;
         this.idp = idp;

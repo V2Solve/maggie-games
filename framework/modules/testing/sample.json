@@ -1,12 +1,42 @@
 {
-    "emailStatus": 1,
-    "accountStatus": 0,
-    "location": {
-        "country": "USA",
-        "zip": "30005"
-    },
-    "username": "testUser5",
-    "idp": "gmail",
-    "email": "testUser5@gmail.com",
-    "phone": "2489109078"
+"PersonRequest":
+{
+    "requestBody": {
+        "emailStatus": "UnVerified",
+        "accountStatus": "Registered",
+        "location": {
+            "country": "USA",
+            "zip": "30005"
+        },
+        "username": "testUser5",
+        "idp": {
+            "idp": "google",
+            "uniqueId": "something@google.com"
+        },
+        "email": "testUser5@gmail.com",
+        "phone": "2489109078"
+    }
+},
+
+"CreateGameRoomRequest":
+{
+    "requestBody": {
+        "uniqueId": {
+            "creator": {
+                "location": {
+                    "country": "USA",
+                    "zip": "30005"
+                },
+                "username": "testUser5",
+                "idp": {
+                    "idp": "google",
+                    "uniqueId": "something@google.com"
+                },
+                "email": "testUser5@gmail.com",
+                "phone": "2489109078"
+            },
+            "roomName": "MaggieRoom1"
+        }
+    }
+}
 }
